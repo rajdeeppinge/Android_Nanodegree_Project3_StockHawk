@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
-    <com.db.chart.view.LineChartView
-        xmlns:chart="http://schemas.android.com/apk/res-auto"
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:id="@+id/time_period_spinner"
+        android:paddingEnd="@dimen/extra_padding">
+    </Spinner>
+
+    <org.eazegraph.lib.charts.ValueLineChart
         android:id="@+id/linechart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        app:egUseCubic="true"
+        app:egUseOverlapFill="true"
+        app:egIndicatorLineColor="@color/material_red_700"
+        app:egIndicatorTextColor="@android:color/white"
+        app:egIndicatorTextUnit="@string/graph_unit"
+        app:egLegendHeight="@dimen/graph_legend_height"
+        app:egShowValueIndicator="true"/>
 
-</FrameLayout>
+</LinearLayout>

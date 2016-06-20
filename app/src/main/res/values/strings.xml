@@ -10,4 +10,57 @@
   <string name="input_hint">FB</string>
   <string name="input_prefill"></string>
   <string name="network_toast">Uh-oh! This app requires an internet connection</string>
+
+  <!-- Displayed when app is started for the first time without an internet connection -->
+  <string name="stocks_unavailable">Stocks are not available</string>
+
+  <!-- Description of floating button-->
+  <string name="floating_button_content_description">Add new stock</string>
+
+  <!-- symbol tag used in intent extras to access database conveniently -->
+  <string name="stock_symbol" translatable="false">symbol</string>
+
+  <!-- These are the options present in the spinner to get graph for variable time period -->
+  <string name="one_month">1 Month</string>
+  <string name="three_months">3 Months</string>
+  <string name="six_months">6 Months</string>
+  <string name="one_year">1 Year</string>
+  <string name="two_years">2 Years</string>
+  <string name="five_years">5 Years</string>
+
+  <!-- Corresponding query string for spinner options -->
+  <string name="one_month_query" translatable="false">1m</string>
+  <string name="three_months_query" translatable="false">3m</string>
+  <string name="six_months_query" translatable="false">6m</string>
+  <string name="one_year_query" translatable="false">1y</string>
+  <string name="two_years_query" translatable="false">2y</string>
+  <string name="five_years_query" translatable="false">5y</string>
+
+  <!-- Strings used to build query-->
+  <string name="api_base_url" translatable="false">http://chartapi.finance.yahoo.com/instrument/1.0/</string>
+  <string name="api_data_details" translatable="false">chartdata</string>
+  <string name="api_data_type_string" translatable="false">type</string>
+  <string name="api_data_type" translatable="false">quote</string>
+  <string name="api_time_period_range_string" translatable="false">range</string>
+  <string name="api_data_format" translatable="false">json</string>
+
+
+  <!-- Strings used for parsing received JSON object -->
+  <string name="json_object_series_tag" translatable="false">series</string>
+  <string name="json_object_series_date_tag" translatable="false">Date</string>
+  <string name="json_object_series_stock_close_price_tag" translatable="false">close</string>
+  <string name="simple_date_format" translatable="false">yyyyMMdd</string>
+
+  <!-- Used in graphs -->
+  <string name="download_graph_error">Error in Downloading Latest Graph</string>
+  <string name="graph_unit">dollars</string>
+
+  <!-- Name displayed on widget -->
+  <string name="widget_name">StockHawk Widget</string>
+
+  <!-- String used to identify click action on widget -->
+  <string name="click_action" translatable="false">com.sam_chordas.android.quotelistwidget.CLICKQUOTE</string>
+
+  <!-- string tag needed to set background of change amount of stock Red/Green -->
+  <string name="set_background_resource_tag" translatable="false">setBackgroundResource</string> <!--=================================================== -->
 </resources>
