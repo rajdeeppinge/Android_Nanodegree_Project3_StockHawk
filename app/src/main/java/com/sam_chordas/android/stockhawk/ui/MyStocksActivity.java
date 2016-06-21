@@ -19,6 +19,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.sam_chordas.android.stockhawk.R;
@@ -69,16 +70,20 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     mServiceIntent = new Intent(this, StockIntentService.class);
     if (savedInstanceState == null){
       // Run the initialize task service so that some stocks appear upon an empty database
-      mServiceIntent.putExtra("tag", "init");
+      mServiceIntent.putExtra(getResources().getString(R.string.intent_string_tag), getResources().getString(R.string.intent_string_init_tag));
       if (isConnected){
         startService(mServiceIntent);
       } else{
         networkToast();
       }
     }
+
+    //if successful till this point, then the database has been updated
+
     RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
+    getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this); //CURSOR_LOADER_ID = 0
+
 
     mCursorAdapter = new QuoteCursorAdapter(this, null);
     recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(this,
@@ -86,10 +91,26 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
               @Override public void onItemClick(View v, int position) {
                 //TODO:
                 // do something on item click
+                Intent intent = new Intent(mContext, StockGraphsActivity.class);
+                mCursor.moveToPosition(position);
+                intent.putExtra(getResources().getString(R.string.stock_symbol), mCursor.getString(mCursor.getColumnIndex(getResources().getString(R.string.stock_symbol))));
+                startActivity(intent);
               }
             }));
+
     recyclerView.setAdapter(mCursorAdapter);
 
+      TextView emptyView = (TextView) findViewById(R.id.stocks_unavailable);
+
+      if(isConnected) {
+          recyclerView.setVisibility(View.VISIBLE);
+          emptyView.setVisibility(View.GONE);
+      }
+      else {
+          recyclerView.setVisibility(View.GONE);
+          emptyView.setVisibility(View.VISIBLE);
+//          Toast.makeText(this, R.string.network_unavailable, Toast.LENGTH_LONG).show();
+      }
 
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
     fab.attachToRecyclerView(recyclerView);
@@ -108,15 +129,15 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                       new String[] { input.toString() }, null);
                   if (c.getCount() != 0) {
                     Toast toast =
-                        Toast.makeText(MyStocksActivity.this, "This stock is already saved!",
+                        Toast.makeText(MyStocksActivity.this, getResources().getString(R.string.stock_already_present),
                             Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER, Gravity.CENTER, 0);
                     toast.show();
                     return;
                   } else {
                     // Add the stock to DB
-                    mServiceIntent.putExtra("tag", "add");
-                    mServiceIntent.putExtra("symbol", input.toString());
+                    mServiceIntent.putExtra(getResources().getString(R.string.intent_string_tag), getResources().getString(R.string.intent_string_add_tag));
+                    mServiceIntent.putExtra(getResources().getString(R.string.stock_symbol), input.toString());
                     startService(mServiceIntent);
                   }
                 }
@@ -137,7 +158,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     if (isConnected){
       long period = 3600L;
       long flex = 10L;
-      String periodicTag = "periodic";
+      String periodicTag = getResources().getString(R.string.connection_check_periodic_tag);
 
       // create a periodic task to pull stocks once every hour after the app has been opened. This
       // is so Widget data stays up to date.
@@ -163,7 +184,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
   }
 
   public void networkToast(){
-    Toast.makeText(mContext, getString(R.string.network_toast), Toast.LENGTH_SHORT).show();
+    Toast.makeText(mContext, getString(R.string.network_toast), Toast.LENGTH_LONG).show();
   }
 
   public void restoreActionBar() {

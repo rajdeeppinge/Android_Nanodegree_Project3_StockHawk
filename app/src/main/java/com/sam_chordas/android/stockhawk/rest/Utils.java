@@ -2,6 +2,8 @@ package com.sam_chordas.android.stockhawk.rest;
 
 import android.content.ContentProviderOperation;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import java.util.ArrayList;
@@ -30,27 +32,44 @@ public class Utils {
         if (count == 1){
           jsonObject = jsonObject.getJSONObject("results")
               .getJSONObject("quote");
-          batchOperations.add(buildBatchOperation(jsonObject));
+          try {
+            batchOperations.add(buildBatchOperation(jsonObject));
+          }
+          catch(NumberFormatException except) {
+            throw except;
+          }
         } else{
-          resultsArray = jsonObject.getJSONObject("results").getJSONArray("quote");
+          resultsArray = jsonObject.getJSONObject("results").getJSONArray("quote");//gives array of quotes instead of single object
 
           if (resultsArray != null && resultsArray.length() != 0){
             for (int i = 0; i < resultsArray.length(); i++){
               jsonObject = resultsArray.getJSONObject(i);
-              batchOperations.add(buildBatchOperation(jsonObject));
+              try {
+                batchOperations.add(buildBatchOperation(jsonObject));
+              }
+              catch(NumberFormatException except) {
+                throw except;
+              }
             }
           }
         }
       }
     } catch (JSONException e){
       Log.e(LOG_TAG, "String to JSON failed: " + e);
+    } catch (NumberFormatException except) {
+      Log.e(LOG_TAG, "Number formatting failed: " + except);
     }
     return batchOperations;
   }
 
   public static String truncateBidPrice(String bidPrice){
-    bidPrice = String.format("%.2f", Float.parseFloat(bidPrice));
-    return bidPrice;
+    try {
+        bidPrice = String.format("%.2f", Float.parseFloat(bidPrice));
+    } catch (NumberFormatException except) {
+        Log.e(LOG_TAG, "Number formatting failed: " + except);
+    }
+
+      return bidPrice;
   }
 
   public static String truncateChange(String change, boolean isPercentChange){
@@ -89,6 +108,9 @@ public class Utils {
 
     } catch (JSONException e){
       e.printStackTrace();
+    }
+    catch (NumberFormatException except) {
+      throw except;
     }
     return builder.build();
   }
